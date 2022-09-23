@@ -1,23 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
+import "./app.css"
+import Header from "./Component/Header";
+
 
 function App() {
+  const[data , setData] = useState([])
+
+  const url = 'https://jsonplaceholder.typicode.com/users'
+
+  const fetchData = async()=>{
+    try {
+     const res = await axios.get(url)
+    //  console.log(res);
+        if(res?.data?.length){
+            setData(res.data)
+            // console.log(res);
+            
+        }
+    } catch (error) {
+       return alert("unable to fetch data")
+    }   
+  } 
+
+  useEffect(() => {
+
+    fetchData();
+    // console.log(data);
+  
+    
+  }, [])
+
+  // console.log(data)
+  
+  
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+              <Header/>
+              <div className="row m-5 justify-content-evenly">
+                {data.map((v,i)=>(
+                  <div key={i} className="wh p-5 m-4 card shadow">
+                      <p>Name: {v.name}</p>
+                      <p>Email: {v.email}</p>
+                      <p>Number: {v.phone}</p>
+                      <p>Address: {v.address.city}-{v.address.street}</p>
+                  </div>
+                ))}
+              
+            
+
+            </div>
     </div>
   );
 }
